@@ -6,6 +6,7 @@
 
 | 插件 | 简介 | 状态 | 最新版本 |
 | --- | --- | --- | --- |
+| [EpicBeheading](/plugins/EpicBeheading/index) | PvP 玩家头颅掉落、VIP 掉率与排行榜 | 活跃 | 1.1.6 |
 | [EpicExoticGarden](/plugins/EpicExoticGarden/index) | 独立异域花园与农耕插件 | 活跃 | 1.0.4 |
 
 ## 添加新插件文档

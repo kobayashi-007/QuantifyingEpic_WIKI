@@ -13,7 +13,7 @@
         <dl class="author">
           <dt>{{ t.author }}</dt>
           <dd>
-            <a href="resources/authors/quantifyingepic.2596545/">QuantifyingEpic</a>
+            <a :href="cfg.authorLink">{{ isZh() ? cfg.authorZh : cfg.authorEn }}</a>
           </dd>
         </dl>
         <dl class="downloadCount">
@@ -34,7 +34,7 @@
         </dl>
       </div>
       <div class="footnote">
-        <a href="https://blog.linchangqing.xyz/" rel="nofollow" target="_blank">{{ t.moreInfo }}</a>
+        <a :href="cfg.blogLink" rel="nofollow" target="_blank">{{ t.moreInfo }}</a>
       </div>
     </div>
   </div>
@@ -65,8 +65,29 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
+import { reactive, computed, onMounted } from 'vue'
 import { useData } from 'vitepress'
+import { plugins as pluginData } from '../data/plugins'
+
+// 用法：<ResourceInfo plugin="epicbeheading" />
+// 所有信息在 ../data/plugins.js 中集中维护；
+// 下面的 props 全部可选，仅用于临时覆盖 plugins.js 中的对应字段
+const props = defineProps({
+  plugin: { type: String, default: 'epicexoticgarden' },
+  resourceId: [Number, String],
+  authorZh: String,
+  authorEn: String,
+  authorLink: String,
+  blogLink: String,
+})
+
+// plugins.js 配置 + Markdown 传入的覆盖项（覆盖项优先）
+const cfg = computed(() => {
+  const overrides = Object.fromEntries(
+    Object.entries(props).filter(([k, v]) => v !== undefined && k !== 'plugin')
+  )
+  return { ...pluginData[props.plugin], ...overrides }
+})
 
 const { lang } = useData()
 const isZh = () => lang.value === 'zh-CN'
@@ -86,7 +107,7 @@ const data = reactive({
   downloads: '—',
   firstRelease: '—',
   lastUpdate: '—',
-  version: '1.0.4',
+  version: '',
   versionRelease: '—',
   versionDownloads: '—',
 })
@@ -94,7 +115,7 @@ const data = reactive({
 onMounted(async () => {
   try {
     // 1) 拉取资源基本信息
-    const res = await fetch('https://api.spiget.org/v2/resources/139067')
+    const res = await fetch(`https://api.spiget.org/v2/resources/${cfg.value.resourceId}`)
     if (!res.ok) throw new Error('spiget resource failed')
     const json = await res.json()
 
@@ -113,7 +134,7 @@ onMounted(async () => {
     }
 
     // 2) 拉取最新版本信息
-    const vRes = await fetch('https://api.spiget.org/v2/resources/139067/versions/latest')
+    const vRes = await fetch(`https://api.spiget.org/v2/resources/${cfg.value.resourceId}/versions/latest`)
     if (!vRes.ok) throw new Error('spiget version failed')
     const vJson = await vRes.json()
 

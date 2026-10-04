@@ -6,6 +6,7 @@
 
 | Plugin | Description | Status | Latest |
 | --- | --- | --- | --- |
+| [EpicBeheading](/en/plugins/EpicBeheading/index) | PvP player head drops, VIP drop rates & leaderboards | Active | 1.1.6 |
 | [EpicExoticGarden](/en/plugins/EpicExoticGarden/index) | Standalone exotic garden and farming plugin | Active | 1.0.4 |
 
 ## Adding New Plugin Docs

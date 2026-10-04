@@ -2,28 +2,28 @@
   <div class="plugin-page">
     <div class="plugin-header">
       <div class="plugin-icon">
-        <img src="https://www.spigotmc.org/data/resource_icons/139/139067.jpg?1790222770" alt="EpicExoticGarden">
+        <img :src="cfg.icon" :alt="isZh() ? cfg.titleZh : cfg.titleEn">
       </div>
       <div class="plugin-info">
         <h1 class="plugin-title">
-          {{ t.title }}
+          {{ isZh() ? cfg.titleZh : cfg.titleEn }}
           <span class="version">{{ data.version }}</span>
         </h1>
-        <p class="plugin-tagline">{{ t.tagline }}</p>
+        <p class="plugin-tagline">{{ isZh() ? cfg.taglineZh : cfg.taglineEn }}</p>
       </div>
       <div class="plugin-download">
-        <a href="https://www.spigotmc.org/resources/epicexoticgarden.139067/" target="_blank" rel="noopener" class="download-btn">
+        <a :href="`https://www.spigotmc.org/resources/${cfg.resourceId}/`" target="_blank" rel="noopener" class="download-btn">
           <span class="download-text">{{ t.download }}</span>
-          <span class="download-size">236.3 KB .jar</span>
+          <span class="download-size">{{ cfg.fileSize }}</span>
         </a>
       </div>
     </div>
 
     <div class="plugin-tabs">
       <div class="tab-item active">{{ t.overview }}</div>
-      <a class="tab-item" href="https://www.spigotmc.org/resources/139067/field?field=documentation">{{ t.docs }}</a>
-      <a class="tab-item" href="https://www.spigotmc.org/resources/139067/updates">{{ t.updates }} <span class="tab-badge">{{ data.updateCount }}</span></a>
-      <a class="tab-item" href="https://www.spigotmc.org/resources/.139067/history">{{ t.history }}</a>
+      <a class="tab-item" :href="`https://www.spigotmc.org/resources/${cfg.resourceId}/field?field=documentation`">{{ t.docs }}</a>
+      <a class="tab-item" :href="`https://www.spigotmc.org/resources/${cfg.resourceId}/updates`">{{ t.updates }} <span class="tab-badge">{{ data.updateCount }}</span></a>
+      <a class="tab-item" :href="`https://www.spigotmc.org/resources/${cfg.resourceId}/history`">{{ t.history }}</a>
     </div>
 
     <div class="plugin-content">
@@ -31,32 +31,45 @@
         <div class="customResourceFields aboveInfo">
           <dl>
             <dt>{{ t.nativeVersion }}</dt>
-            <dd>26.3</dd>
+            <dd>{{ cfg.nativeVersion }}</dd>
           </dl>
           <dl>
             <dt>{{ t.testedVersions }}</dt>
             <dd>
               <ul class="plainList">
-                <li v-for="v in testedVersions" :key="v">{{ v }}</li>
+                <li v-for="v in testedList" :key="v">{{ v }}</li>
               </ul>
             </dd>
           </dl>
-          <dl>
+          <dl v-if="cfg.sourceCode">
             <dt>{{ t.sourceCode }}</dt>
-            <dd><a href="https://github.com/kobayashi-007/EpicExoticGarden/" target="_blank" rel="noopener">https://github.com/kobayashi-007/EpicExoticGarden/</a></dd>
+            <dd><a :href="cfg.sourceCode" target="_blank" rel="noopener">{{ cfg.sourceCode }}</a></dd>
           </dl>
-          <dl>
+          <dl v-if="cfg.contributors">
             <dt>{{ t.contributors }}</dt>
-            <dd><a href="https://github.com/kobayashi-007/EpicExoticGarden/" target="_blank" rel="noopener">https://github.com/kobayashi-007/EpicExoticGarden/</a></dd>
+            <dd><a :href="cfg.contributors" target="_blank" rel="noopener">{{ cfg.contributors }}</a></dd>
           </dl>
           <dl>
             <dt>{{ t.languages }}</dt>
-            <dd>简体中文, English, 繁体中文, 日本語, Deutsch, français, русский язык</dd>
+            <dd>{{ isZh() ? cfg.languagesZh : cfg.languagesEn }}</dd>
           </dl>
-          <dl>
+          <dl v-if="cfg.donate">
             <dt>{{ t.donate }}</dt>
-            <dd><a href="https://afdian.com/a/Linchangqing" target="_blank" rel="noopener">https://afdian.com/a/Linchangqing</a></dd>
+            <dd><a :href="cfg.donate" target="_blank" rel="noopener">{{ cfg.donate }}</a></dd>
           </dl>
+        </div>
+
+        <!-- 社区链接：居中一排（plugins.js 中对应项为空则不显示） -->
+        <div v-if="cfg.discordLink || wikiUrl || cfg.kookLink" class="social-links">
+          <a v-if="cfg.discordLink" :href="cfg.discordLink" target="_blank" rel="noopener" title="Discord">
+            <img src="https://pluginepic.187322.xyz/Discord0.png" alt="Discord">
+          </a>
+          <a v-if="wikiUrl" :href="wikiUrl" target="_blank" rel="noopener" title="Wiki">
+            <img src="https://pluginepic.187322.xyz/wiki.png" alt="Wiki">
+          </a>
+          <a v-if="cfg.kookLink" :href="cfg.kookLink" target="_blank" rel="noopener" title="KOOK">
+            <img src="https://pluginepic.187322.xyz/kook.png" alt="KOOK">
+          </a>
         </div>
       </div>
     </div>
@@ -64,15 +77,47 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
+import { reactive, computed, onMounted } from 'vue'
 import { useData } from 'vitepress'
+import { plugins as pluginData } from '../data/plugins'
+
+// 用法：<PluginCard plugin="epicbeheading" />
+// 所有信息在 ../data/plugins.js 中集中维护；
+// 下面的 props 全部可选，仅用于临时覆盖 plugins.js 中的对应字段
+const props = defineProps({
+  plugin: { type: String, default: 'epicexoticgarden' },
+  resourceId: [Number, String],
+  icon: String,
+  titleZh: String,
+  titleEn: String,
+  taglineZh: String,
+  taglineEn: String,
+  nativeVersion: String,
+  testedVersions: [Array, String],
+  sourceCode: String,
+  contributors: String,
+  languagesZh: String,
+  languagesEn: String,
+  donate: String,
+  fileSize: String,
+  discordLink: String,
+  wikiLinkZh: String,
+  wikiLinkEn: String,
+  kookLink: String,
+})
+
+// plugins.js 配置 + Markdown 传入的覆盖项（覆盖项优先）
+const cfg = computed(() => {
+  const overrides = Object.fromEntries(
+    Object.entries(props).filter(([k, v]) => v !== undefined && k !== 'plugin')
+  )
+  return { ...pluginData[props.plugin], ...overrides }
+})
 
 const { lang } = useData()
 const isZh = () => lang.value === 'zh-CN'
 
 const t = {
-  title: isZh() ? '🌿 EpicExoticGarden | 异域园艺农场 ✨' : '🌿 EpicExoticGarden | Exotic Gardening Farm ✨',
-  tagline: isZh() ? '栽种珍稀果树与魔法作物 — 采摘鲜果，制作餐食与特色饮品' : 'Grow exotic fruit trees and magical crops — harvest fresh fruits, cook dishes and specialty drinks',
   download: isZh() ? '立即下载' : 'Download Now',
   overview: isZh() ? '概述' : 'Overview',
   docs: isZh() ? '文档' : 'Documentation',
@@ -86,23 +131,31 @@ const t = {
   donate: isZh() ? '捐款链接:' : 'Donation Link:',
 }
 
-const testedVersions = ['1.12', '1.13', '1.14', '1.15', '1.16', '1.17', '1.18', '1.19', '1.20', '1.20.6', '1.21', '26.1', '26.2', '26.3']
-
 const data = reactive({
-  version: '1.0.4',
-  updateCount: 4,
+  version: '',
+  updateCount: 0,
 })
+
+// 兼容数组 / 逗号字符串两种配置方式
+const testedList = computed(() =>
+  Array.isArray(cfg.value.testedVersions)
+    ? cfg.value.testedVersions
+    : String(cfg.value.testedVersions).split(',').map(s => s.trim()).filter(Boolean)
+)
+
+// Wiki 链接按当前语言选择
+const wikiUrl = computed(() => (isZh() ? cfg.value.wikiLinkZh : cfg.value.wikiLinkEn) || '')
 
 onMounted(async () => {
   try {
     // 最新版本号
-    const vRes = await fetch('https://api.spiget.org/v2/resources/139067/versions/latest')
+    const vRes = await fetch(`https://api.spiget.org/v2/resources/${cfg.value.resourceId}/versions/latest`)
     if (vRes.ok) {
       const vJson = await vRes.json()
       if (vJson.name) data.version = vJson.name
     }
     // 更新数量
-    const uRes = await fetch('https://api.spiget.org/v2/resources/139067/updates')
+    const uRes = await fetch(`https://api.spiget.org/v2/resources/${cfg.value.resourceId}/updates`)
     if (uRes.ok) {
       const uJson = await uRes.json()
       if (Array.isArray(uJson) && uJson.length) data.updateCount = uJson.length
@@ -300,6 +353,30 @@ onMounted(async () => {
   .customResourceFields dd {
     margin-left: 0;
   }
+}
+
+/* 社区链接：居中一排 */
+.social-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--vp-c-divider);
+}
+.social-links a {
+  display: inline-flex;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.social-links a:hover {
+  transform: translateY(-2px);
+  opacity: 0.85;
+}
+.social-links img {
+  height: 40px;
+  width: auto;
+  border-radius: 8px;
 }
 
 @media (max-width: 640px) {

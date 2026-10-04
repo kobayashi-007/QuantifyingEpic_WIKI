@@ -86,11 +86,30 @@ export default defineConfig({
               ]
             }
           ],
+          '/en/plugins/EpicBeheading/': [
+            {
+              text: 'EpicBeheading Docs',
+              items: [
+                { text: '⚔ EpicBeheading', link: '/en/plugins/EpicBeheading/index' },
+                { text: '📈 bStats Statistics', link: 'https://bstats.org/plugin/bukkit/EpicBeheading/33580' },
+                { text: '📈 bStats Live', link: '/en/plugins/EpicBeheading/bstats' },
+                {
+                  text: '⚙️ Basic Configuration',
+                  collapsed: true,
+                  items: [
+                    { text: 'config.yml', link: '/en/plugins/EpicBeheading/Configuration/config' },
+                    { text: 'Commands & Permissions', link: '/en/plugins/EpicBeheading/Configuration/Commands' }
+                  ]
+                }
+              ]
+            }
+          ],
           '/en/plugins/': [
             {
               text: 'Plugin List',
               items: [
                 { text: 'Overview', link: '/en/plugins/' },
+                { text: 'EpicBeheading', link: '/en/plugins/EpicBeheading/index' },
                 { text: 'EpicExoticGarden', link: '/en/plugins/EpicExoticGarden/index' }
               ]
             }
@@ -145,6 +164,8 @@ export default defineConfig({
           ]
         }
       ],
+
+      // EPICEXOTICGARDEN插件
       '/plugins/EpicExoticGarden/': [
         {
           text: 'EpicExoticGarden 文档',
@@ -195,15 +216,37 @@ export default defineConfig({
           ]
         }
       ],
+
+      // EPICBEHEADING插件
+      '/plugins/EpicBeheading/': [
+        {
+          text: 'EpicBeheading 文档',
+          items: [
+            { text: '⚔ EpicBeheading', link: '/plugins/EpicBeheading/index' },
+            { text: '📈 bStats插件统计', link: 'https://bstats.org/plugin/bukkit/EpicBeheading/33580' },
+            { text: '📈 bStats在线统计', link: '/plugins/EpicBeheading/bstats' },
+            {
+              text: '⚙️ 插件基础配置',
+              collapsed: true,
+              items: [
+                { text: 'config.yml', link: '/plugins/EpicBeheading/Configuration/config' },
+                { text: '命令与权限', link: '/plugins/EpicBeheading/Configuration/Commands' },
+              ]
+            }
+          ]
+        }
+      ],
+
       '/plugins/': [
         {
           text: '插件列表',
           items: [
             { text: '总览', link: '/plugins/' },
+            { text: 'EpicBeheading', link: '/plugins/EpicBeheading/index' },
             { text: 'EpicExoticGarden', link: '/plugins/EpicExoticGarden/index' }
           ]
         }
-      ]
+      ],
     },
 
 
