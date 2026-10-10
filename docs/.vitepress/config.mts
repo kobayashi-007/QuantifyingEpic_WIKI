@@ -69,6 +69,18 @@ export default defineConfig({
                   ]
                 },
                 {
+                  text: '🎨 Official Model Setup',
+                  collapsed: true,
+                  items: [
+                    { text: 'Plants & Fruits', link: '/en/plugins/EpicExoticGarden/Officialmodel/plantsfruits' },
+                    { text: 'Ingredients & Tools', link: '/en/plugins/EpicExoticGarden/Officialmodel/ingredients.tools' },
+                    { text: 'Dishes', link: '/en/plugins/EpicExoticGarden/Officialmodel/dishes' },
+                    { text: 'Drinks', link: '/en/plugins/EpicExoticGarden/Officialmodel/drinks' },
+                    { text: 'Magical Crops', link: '/en/plugins/EpicExoticGarden/Officialmodel/magicalcrops' },
+                    { text: 'Coming Soon', link: '/en/plugins/EpicExoticGarden/Officialmodel/expected' }
+                  ]
+                },
+                {
                   text: '🎨 Model Tutorial (Coming Soon)',
                   collapsed: true,
                   items: [
@@ -180,6 +192,18 @@ export default defineConfig({
                 { text: 'config.yml', link: '/plugins/EpicExoticGarden/Configuration/config' },
                 { text: 'models.yml', link: '/plugins/EpicExoticGarden/Configuration/models' },
                 { text: '权限与命令', link: '/plugins/EpicExoticGarden/Configuration/Permissions' },
+              ]
+            },
+            {
+              text: '🎨 官方模型设置models',
+              collapsed: true,
+              items: [
+                { text: 'Plants & Fruits', link: '/plugins/EpicExoticGarden/Officialmodel/plantsfruits' },
+                { text: 'Ingredients & Tools', link: '/plugins/EpicExoticGarden/Officialmodel/ingredients.tools' },
+                { text: 'Dishes', link: '/plugins/EpicExoticGarden/Officialmodel/dishes' },
+                { text: 'Drinks', link: '/plugins/EpicExoticGarden/Officialmodel/drinks' },
+                { text: 'Magical Crops', link: '/plugins/EpicExoticGarden/Officialmodel/magicalcrops' },
+                { text: '敬请期待', link: '/plugins/EpicExoticGarden/Officialmodel/expected' }
               ]
             },
             {
